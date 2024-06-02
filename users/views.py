@@ -6,7 +6,7 @@ from django.contrib.auth.views import LoginView
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy, reverse
-from django.views.generic import CreateView
+from django.views.generic import CreateView, ListView
 
 from config.settings import EMAIL_HOST_USER
 from users.forms import UserRegisterForm, UserAuthenticationForm
@@ -94,3 +94,13 @@ def password_reset(request):
         )
         return render(request, 'users/password_reset_done.html', {'title': 'Подтверждение'})
     return render(request, 'users/password_reset.html', {'title': 'Сброс пароля'})
+
+
+class UserListView(ListView):
+    model = User
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Пользователи'
+        context['user_count'] = User.objects.count() - 1
+        return context

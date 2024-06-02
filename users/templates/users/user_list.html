@@ -1,0 +1,17 @@
+{% extends 'main/index.html' %}
+{% block content %}
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-6">Наши пользователи. Всего {{ user_count }}</h1>
+     <div class="mb-5">
+                </div>
+    <table class="table">
+      {% for user in object_list %}
+  <tbody>
+    <tr>
+      <td>{{ user.company_name }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div>
+{% endblock %}

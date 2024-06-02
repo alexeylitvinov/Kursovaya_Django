@@ -7,6 +7,7 @@ NULLABLE = {'null': True, 'blank': True}
 class User(AbstractUser):
     username = None
     email = models.EmailField(unique=True, verbose_name='Почта')
+    company_name = models.CharField(max_length=100, verbose_name='Компания')
     first_name = models.CharField(max_length=50, **NULLABLE, verbose_name='Имя')
     last_name = models.CharField(max_length=50, **NULLABLE, verbose_name='Фамилия')
     token = models.CharField(max_length=100, **NULLABLE, verbose_name='Токен')
@@ -20,4 +21,4 @@ class User(AbstractUser):
         verbose_name_plural = 'Пользователи'
 
     def __str__(self):
-        return f'{self.email}, {self.name}, {self.surname}'
+        return f'{self.email}, {self.company_name}, {self.first_name}, {self.last_name}'
