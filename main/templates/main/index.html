@@ -3,6 +3,11 @@
 {% block css %}
     <link rel="stylesheet" href="{% static 'css/my_footer_css.css' %}">
 {% endblock %}
+{% block content %}
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+<h1 class="display-6">Количество уникальных клиентов: {{ unique_client_count }}</h1>
+</div>
+{% endblock %}
 {% block footer%}
 <footer class="py-4">
     <div class="container">

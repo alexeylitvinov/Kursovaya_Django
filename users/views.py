@@ -10,7 +10,7 @@ from django.views.generic import CreateView, ListView
 
 from config.settings import EMAIL_HOST_USER
 from users.forms import UserRegisterForm, UserAuthenticationForm
-from users.models import User
+from users.models import User, Client
 
 
 class UserCreateView(CreateView):
@@ -103,4 +103,23 @@ class UserListView(ListView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Пользователи'
         context['user_count'] = User.objects.count() - 1
+        return context
+
+    def get_queryset(self):
+        return User.objects.filter(is_superuser=False)
+
+
+class ClientListView(ListView):
+    model = Client
+
+    def get_queryset(self):
+        if self.request.user.is_authenticated:
+            return Client.objects.filter(user=self.request.user)
+        else:
+            return Client.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Клиенты'
+        context['client_count'] = self.get_queryset().count()
         return context

@@ -22,3 +22,18 @@ class User(AbstractUser):
 
     def __str__(self):
         return f'{self.email}, {self.company_name}, {self.first_name}, {self.last_name}'
+
+
+class Client(models.Model):
+    email = models.EmailField(verbose_name='Почта')
+    first_name = models.CharField(max_length=50, **NULLABLE, verbose_name='Имя')
+    last_name = models.CharField(max_length=50, **NULLABLE, verbose_name='Фамилия')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
+
+    class Meta:
+        db_table = 'contacts'
+        verbose_name = 'Контакт'
+        verbose_name_plural = 'Контакты'
+
+    def __str__(self):
+        return f'{self.first_name}, {self.last_name}, {self.email}'
