@@ -1,0 +1,30 @@
+{% extends 'main/index.html' %}
+{% block content %}
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-6">Клиент</h1>
+    <div class="mb-5"></div>
+    <table class="table table-hover">
+        <tbody>
+        <tr>
+            <td>Имя:</td>
+            <td>{{ object.first_name }}</td>
+        </tr>
+        <tr>
+            <td>Фамилия:</td>
+            <td>{{ object.last_name }}</td>
+        </tr>
+        <tr>
+            <td>Почта:</td>
+            <td>{{ object.email }}</td>
+        </tr>
+        <tr>
+            <td>Пользователь:</td>
+            <td>{{ object.user }}</td>
+        </tr>
+        </tbody>
+    </table>
+    <a class="btn btn-light" href="#">Редактировать</a>
+    <a class="btn btn-light" href="#">Удалить</a>
+    <a class="btn btn-light" href="{% url 'users:clients' %}">Назад</a>
+</div>
+{% endblock %}

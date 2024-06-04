@@ -1,8 +1,8 @@
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-
+from django import forms
 from django.forms import BooleanField
 
-from users.models import User
+from users.models import User, Client
 
 
 class StyleFormMixin:
@@ -29,3 +29,9 @@ class UserAuthenticationForm(StyleFormMixin, AuthenticationForm):
     class Meta:
         model = User
         fields = ('email', 'password')
+
+
+class ClientForm(StyleFormMixin, forms.ModelForm):
+    class Meta:
+        model = Client
+        fields = ('first_name', 'last_name', 'email')

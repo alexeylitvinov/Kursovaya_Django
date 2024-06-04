@@ -8,13 +8,16 @@
         {% for client in object_list %}
         <tbody>
         <tr>
-            <td>{{ client.email }}</td>
+            <td><a href="{% url 'users:client_detail' client.pk %}"
+                   class="link-dark link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover px-2">
+                {{ client.email }}</a></td>
             <td>{{ client.first_name }}</td>
             <td>{{ client.last_name }}</td>
         </tr>
         {% endfor %}
         </tbody>
     </table>
+    <a class="btn btn-light" href="{% url 'users:client_create' %}">Добавить клиента</a>
     {% else %}
     <h1 class="display-6">Клиенты наших пользователей. Всего {{ client_count }}</h1>
     {% endif %}

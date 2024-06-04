@@ -31,6 +31,7 @@ class Client(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
 
     class Meta:
+        unique_together = ('user', 'email',)
         db_table = 'contacts'
         verbose_name = 'Контакт'
         verbose_name_plural = 'Контакты'

@@ -1,0 +1,24 @@
+{% extends 'main/index.html' %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-6 col-md">
+            <form method="post" enctype="multipart/form-data">
+                <div class="mb-3">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    {% if messages %}
+                        <ul class="messages">
+<!--                            {% for message in messages %}-->
+                                <li>{{ message }}</li>
+<!--                            {% endfor %}-->
+                        </ul>
+                    {% endif %}
+                </div>
+                <button type="submit" class="btn btn-light">Сохранить</button>
+                <a href="{% url 'users:clients' %}" class="btn btn-light">Назад</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
