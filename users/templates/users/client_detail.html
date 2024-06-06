@@ -23,8 +23,8 @@
         </tr>
         </tbody>
     </table>
-    <a class="btn btn-light" href="#">Редактировать</a>
-    <a class="btn btn-light" href="#">Удалить</a>
+    <a class="btn btn-light" href="{% url 'users:client_update' client.pk %}">Редактировать</a>
+    <a class="btn btn-light" href="{% url 'users:client_delete' client.pk %}">Удалить</a>
     <a class="btn btn-light" href="{% url 'users:clients' %}">Назад</a>
 </div>
 {% endblock %}

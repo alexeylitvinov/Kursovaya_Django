@@ -1,0 +1,17 @@
+{% extends 'main/index.html' %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-6 col-md">
+            <form method="post" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <p class="card-text">Действительно хотите удалить {{ object.email }} ?</p>
+                    {% csrf_token %}
+                </div>
+                <button type="submit" class="btn btn-light">Удалить</button>
+                <a href="{% url 'users:client_detail' client.pk %}" class="btn btn-light">Назад</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

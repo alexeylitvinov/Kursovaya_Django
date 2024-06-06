@@ -1,0 +1,11 @@
+{% extends 'main/index.html' %}
+{% block content %}
+<div class="card" style="width: 58rem; margin: 0 auto;">
+  <img src="{{ object.image.url }}" class="card-img-top img-thumbnail">
+  <div class="card-body">
+    <p class="lead">{{ object.content }}</p>
+  </div>
+</div>
+<div class="mb-3"></div>
+<a href="{% url 'blogs:blogs' %}" class="btn btn-light">Назад</a>
+{% endblock %}
