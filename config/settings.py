@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'main',
     'users',
     'blogs',
+    'mailings',
 ]
 
 MIDDLEWARE = [
@@ -148,3 +149,12 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 MEDIA_URL = 'media/'
 
 MEDIA_ROOT = BASE_DIR / 'media'
+
+CACHE_ENABLED = True
+if CACHE_ENABLED:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+            'LOCATION': os.getenv('LOCATION')
+        }
+    }

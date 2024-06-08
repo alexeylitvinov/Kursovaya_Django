@@ -7,6 +7,6 @@ from main.views import index, about
 app_name = MainConfig.name
 
 urlpatterns = [
-    path('', cache_page(60)(index), name='index'),
+    path('', index, name='index'),
     path('about/', about, name='about'),
 ]

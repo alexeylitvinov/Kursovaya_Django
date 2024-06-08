@@ -1,0 +1,22 @@
+{% extends 'main/index.html' %}
+{% block content %}
+<div class="card">
+  <div class="card-header">
+    <p class="lead">{{ object.subject }}</p>
+  </div>
+  <div class="card-body">
+    <p class="card-text">{{ object.body }}</p>
+      <form action="{% url 'mailings:mail_detail' object.slug %}" method="post">
+    {% csrf_token %}
+</form>
+    <form action="{% url 'mailings:send_email' object.slug %}" method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-light">Отправить</button>
+</form>
+  </div>
+</div>
+<div class="mb-3"></div>
+<a class="btn btn-light" href="{% url 'mailings:mail_update' mail.slug %}">Редактировать</a>
+<a class="btn btn-light" href="{% url 'mailings:mail_delete' mail.slug %}">Удалить</a>
+<a class="btn btn-light" href="{% url 'mailings:mails' %}">Назад</a>
+{% endblock %}

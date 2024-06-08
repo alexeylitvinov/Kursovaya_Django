@@ -10,14 +10,15 @@
                     {% if messages %}
                     <ul class="messages">
                         {% for message in messages %}
-                        <li
-                        {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                        <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>
+                            {{ message }}
+                        </li>
                         {% endfor %}
                     </ul>
                     {% endif %}
                 </div>
                 <button type="submit" class="btn btn-light">Сохранить</button>
-                <a href="{% url 'users:clients' %}" class="btn btn-light">Назад</a>
+                <a href="{% url 'mailings:mails' %}" class="btn btn-light">Назад</a>
             </form>
         </div>
     </div>

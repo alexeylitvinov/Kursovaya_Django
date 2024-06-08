@@ -1,0 +1,97 @@
+[
+  {
+    "model": "users.user",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$1c2rUOe0kxuAUSPJuqMuT9$Wis+iVExQ3wkhBtHiUZiemjQYMOXeHqEJNg652gQI6g=",
+      "last_login": "2024-06-08T10:14:08.903Z",
+      "is_superuser": true,
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2024-06-01T18:06:27.478Z",
+      "email": "admin@admin.com",
+      "company_name": "",
+      "first_name": null,
+      "last_name": null,
+      "token": null,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 2,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$bzeklgO3GXmgkANxxhficV$iPkPBk9g29uA8qGSzEG56wvrxbJzLfccovjjJndHft8=",
+      "last_login": "2024-06-08T07:38:27.040Z",
+      "is_superuser": false,
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-06-01T18:10:21.121Z",
+      "email": "alextwin1976@gmail.com",
+      "company_name": "skypro",
+      "first_name": "Oleksii",
+      "last_name": "Litvinov",
+      "token": "c02f8281d2e1b2f619009be1287dffe5",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 5,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$o77eVPJ7bGHMyfHBPY4Gfb$XjFQqgeJjJE3HYkWDxOGRNxpGKPseL7MzjBotIHBh7Y=",
+      "last_login": "2024-06-04T07:18:59.147Z",
+      "is_superuser": false,
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-06-01T19:10:02.022Z",
+      "email": "rixax31236@adrais.com",
+      "company_name": "yandex",
+      "first_name": "vasya",
+      "last_name": "buslaev",
+      "token": "329611c8835a3d7f88b5c994414ad3b7",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 6,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$l3ooHVzkcgRN0v7RpFqq2U$OZyVuuGv6xBL4831K0lTgRUDlJ+k73qBoaRWqLrqdiQ=",
+      "last_login": "2024-06-04T10:43:02.552Z",
+      "is_superuser": false,
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-06-02T17:56:25.037Z",
+      "email": "ygeoe@mailto.plus",
+      "company_name": "Google",
+      "first_name": "Andrey",
+      "last_name": "Bayden",
+      "token": "b9939c71230ccda17c899b4b7bb6e9c4",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 7,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$mPDO2JjwTvSA1ol9B5vgaX$JuNl/ka7l1XSWA7RO8LNBXFMJD/W4kn8Kf5q8gtE0K0=",
+      "last_login": "2024-06-04T10:20:59.191Z",
+      "is_superuser": false,
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-06-04T09:17:47.443Z",
+      "email": "vifyacufyo@gufum.com",
+      "company_name": "Gazprom",
+      "first_name": "Д",
+      "last_name": null,
+      "token": "e72664e45c16ac518e96556ad59be367",
+      "groups": [],
+      "user_permissions": []
+    }
+  }
+]

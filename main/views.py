@@ -1,3 +1,4 @@
+from django.core.cache import cache
 from django.shortcuts import render
 
 from blogs.models import Blog
@@ -6,7 +7,10 @@ from users.models import Client
 
 def index(request):
     unique_client_count = Client.objects.values('email').distinct().count()
-    latest_objects = Blog.objects.order_by('-id')[:3]
+    latest_objects = cache.get('latest_objects')
+    if not latest_objects:
+        latest_objects = Blog.objects.order_by('-id')[:3]
+        cache.set('latest_objects', latest_objects, 60 * 15)
     context = {
         'title': 'Главная',
         'unique_client_count': unique_client_count,
