@@ -5,6 +5,13 @@
     <h1 class="display-6">Ваши письма. Всего {{ mail_count }}</h1>
     <div class="mb-5"></div>
     <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col">Тема</th>
+            <th scope="col">Содержание</th>
+            <th scope="col">Рассылка</th>
+        </tr>
+        </thead>
         {% for mail in object_list %}
         <tbody>
         <tr>
@@ -12,6 +19,16 @@
                    class="link-dark link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover px-2">
                 {{ mail.subject|truncatechars:55 }}</a></td>
             <td>{{ mail.body|truncatechars:55 }}</td>
+            {% for mailing in mail.mailing_set.all %}
+            <td>
+                {% if mail.mailing_set.exists %}
+                <a href="{% url 'mailings:mailing_detail' mailing.pk %}"
+                   class="link-dark link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover px-2">
+                    {{ mailing.get_status_display }}
+                </a>
+                {% endif %}
+            </td>
+            {% endfor %}
         </tr>
         {% endfor %}
         </tbody>

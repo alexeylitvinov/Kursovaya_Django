@@ -1,0 +1,48 @@
+{% extends 'main/index.html' %}
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <p class="lead">Дата первой отправки: {{ object.first_send_date }}</p>
+        <p class="lead">Время отправки: {{ object.send_time }}</p>
+    </div>
+    <div class="card-body">
+        <p class="lead">Периодичность рассылки: {{ object.get_frequency_display }}</p>
+        <p class="lead">Статус рассылки: {{ object.get_status_display }}</p>
+    </div>
+    {% csrf_token %}
+    {% if object.status == 'CR' %}
+    <a href="{% url 'mailings:send_email' mail_slug=mailing.mail.slug %}" class="btn btn-light">Начать</a>
+    {% endif %}
+    {% if object.status == 'R' %}
+    <a href="{% url 'mailings:complete_mailing' pk=object.id %}" class="btn btn-light">Завершить</a>
+    {% endif %}
+</div>
+<table class="table table-hover">
+    <thead>
+    <tr>
+        <th scope="col">Клиенты</th>
+        <th scope="col">Статус</th>
+        <th scope="col">Доставка</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for client in clients %}
+    <tr>
+        <td>{{ client.email }}</td>
+        {% if client.last_mailing_attempt %}
+        <td>{{ client.last_mailing_attempt.last_attempt_date }}</td>
+        <td>{{ client.last_mailing_attempt.get_status_display }}</td>
+        <td>{{ client.last_mailing_attempt.server_response }}</td>
+        {% else %}
+        <td>Попытка рассылки не найдена</td>
+        <td>Попытка рассылки не найдена</td>
+        {% endif %}
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<div class="mb-3"></div>
+<a class="btn btn-light" href="{% url 'mailings:mailing_update' pk=object.id %}">Редактировать</a>
+<a class="btn btn-light" href="{% url 'mailings:mailing_delete' pk=object.id %}">Удалить</a>
+<a class="btn btn-light" href="{% url 'mailings:mails' %}">Назад</a>
+{% endblock %}

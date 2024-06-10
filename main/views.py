@@ -2,11 +2,14 @@ from django.core.cache import cache
 from django.shortcuts import render
 
 from blogs.models import Blog
+from mailings.models import Mailing
 from users.models import Client
 
 
 def index(request):
     unique_client_count = Client.objects.values('email').distinct().count()
+    mailing_count = Mailing.objects.all().count()
+    active_mailing_count = Mailing.objects.filter(status='R').count()
     latest_objects = cache.get('latest_objects')
     if not latest_objects:
         latest_objects = Blog.objects.order_by('-id')[:3]
@@ -14,7 +17,9 @@ def index(request):
     context = {
         'title': 'Главная',
         'unique_client_count': unique_client_count,
-        'latest_objects': latest_objects
+        'latest_objects': latest_objects,
+        'mailing_count': mailing_count,
+        'active_mailing_count': active_mailing_count
     }
     return render(request, 'main/index.html', context)
 
