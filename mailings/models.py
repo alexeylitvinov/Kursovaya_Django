@@ -54,7 +54,7 @@ class Mailing(models.Model):
     )
 
     def save(self, *args, **kwargs):
-        # При сохранении новой рассылки удаляем все старые рассылки для этого же письма
+        """ При сохранении новой рассылки удаляем все старые рассылки для этого же письма """
         if not self.pk:  # Проверяем, что это создание новой рассылки, а не обновление существующей
             Mailing.objects.filter(mail=self.mail).delete()
         super().save(*args, **kwargs)

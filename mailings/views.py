@@ -1,13 +1,16 @@
 from django.contrib import messages
 from django.db import IntegrityError
-from django.http import HttpResponseRedirect
+# from django.http import HttpResponseRedirect
+# from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
 
 from django.views.generic import ListView, DetailView, UpdateView, DeleteView, CreateView
 
 from mailings.forms import MailForm, MailingForm
 from mailings.models import Mail, Mailing, MailingAttempt
-from mailings.services import send_email_to_all_clients
+
+
+# from mailings.services import send_email_to_all_clients, schedule_mailing_tasks
 
 
 class MailListView(ListView):
@@ -59,7 +62,11 @@ class MailCreateView(CreateView):
 class MailUpdateView(UpdateView):
     model = Mail
     form_class = MailForm
-    success_url = reverse_lazy('mailings:mails')
+
+    # success_url = reverse_lazy('mailings:mails')
+    def get_success_url(self):
+        # self.object - это объект Mailing, который был обновлен
+        return reverse('mailings:mail_detail', kwargs={'slug': self.object.slug})
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -77,21 +84,39 @@ class MailDeleteView(DeleteView):
         return context
 
 
-def send_email_to_all_clients_view(request, mail_slug):
-    send_email_to_all_clients(request, mail_slug)
-    mails_url = reverse('mailings:mails')
-    return HttpResponseRedirect(mails_url)
+# def send_email_to_all_clients_view(request, mail_slug):
+#     send_email_to_all_clients(request, mail_slug)
+#     mails_url = reverse('mailings:mails')
+#     return HttpResponseRedirect(mails_url)
+
+# def start_schedule(request):
+#     # Запускаем задачу планировщика
+#     schedule_mailing_tasks()
+#
+#     # Перенаправляем пользователя обратно на страницу с рассылками
+#     return redirect(reverse('mailings:mails'))
 
 
 class MailingCreateView(CreateView):
     model = Mailing
     form_class = MailingForm
-    success_url = '/mailings/'
+
+    # success_url = '/mailings/'
 
     def form_valid(self, form):
+        """Установления связи между объектами Mailing и Mail"""
         mail_slug = self.kwargs.get('mail_slug')
         form.instance.mail = Mail.objects.get(slug=mail_slug)
         return super().form_valid(form)
+
+    # def get_success_url(self):
+    #     mail_slug = self.object.mail.slug
+    #     # Используем slug созданного объекта для создания URL
+    #     return reverse('mailings:mail_detail', kwargs={'slug': mail_slug})
+
+    def get_success_url(self):
+        # self.object - это объект Mailing, который был обновлен
+        return reverse('mailings:mailing_detail', kwargs={'pk': self.object.pk})
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -133,9 +158,30 @@ class MailingDeleteView(DeleteView):
 class MailingUpdateView(UpdateView):
     model = Mailing
     form_class = MailingForm
-    success_url = reverse_lazy('mailings:mails')
+
+    # success_url = reverse_lazy('mailings:mailing_detail')
+    def get_success_url(self):
+        # self.object - это объект Mailing, который был обновлен
+        return reverse('mailings:mailing_detail', kwargs={'pk': self.object.pk})
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Редактировать рассылку'
+        return context
+
+
+class MailingAttemptListView(ListView):
+    model = MailingAttempt
+
+    def get_queryset(self):
+        """
+        Переопределите метод `get_queryset`, чтобы отфильтровать попытки рассылки
+        для конкретного `mailing_id`.
+        """
+        mailing_pk = self.kwargs.get('pk')  # Получите `mailing_id` из URL-параметров
+        return MailingAttempt.objects.filter(mailing__pk=mailing_pk)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Логи рассылки'
         return context
