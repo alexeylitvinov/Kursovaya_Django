@@ -5,7 +5,7 @@
         <div class="col-6 col-md">
             <form method="post" enctype="multipart/form-data">
                 <div class="mb-3">
-                    <p class="card-text">Действительно хотите удалить рассылку на <{{ object.mail }}>?</p>
+                    <p class="card-text">Действительно хотите удалить рассылку <{{ object.mail }}>?</p>
                     {% csrf_token %}
                 </div>
                 <button type="submit" class="btn btn-light">Удалить</button>

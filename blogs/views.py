@@ -14,9 +14,6 @@ class BlogListView(ListView):
 
 
 class BlogDetailView(DetailView):
-    """
-    Детальный просмотр объекта Блог
-    """
     model = Blog
 
     def get_context_data(self, **kwargs):

@@ -63,6 +63,10 @@ class Mailing(models.Model):
         db_table = 'mailing'
         verbose_name = 'Рассылка'
         verbose_name_plural = 'Рассылки'
+        permissions = [
+            ('view_all_mailings', 'Может просматривать любые рассылки'),
+            ('disable_mailings', 'Может отключать рассылки')
+        ]
 
     def __str__(self):
         return f'Рассылка {self.get_status_display()} с {self.mail}'

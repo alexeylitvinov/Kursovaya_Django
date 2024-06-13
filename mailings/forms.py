@@ -18,3 +18,9 @@ class MailingForm(StyleFormMixin, forms.ModelForm):
             'first_send_date': forms.DateInput(attrs={'type': 'date'}),
             'send_time': forms.TimeInput(attrs={'type': 'time'}),
         }
+
+
+class MailingManagerForm(StyleFormMixin, forms.ModelForm):
+    class Meta:
+        model = Mailing
+        fields = ('status',)

@@ -19,9 +19,13 @@ class User(AbstractUser):
         db_table = 'users'
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
+        permissions = [
+            ('view_user_list', 'Может просматривать список пользователей'),
+            ('block_users', 'Может блокировать пользователей')
+        ]
 
     def __str__(self):
-        return f'{self.email}, {self.company_name}, {self.first_name}, {self.last_name}'
+        return f'{self.company_name}'
 
 
 class Client(models.Model):

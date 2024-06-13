@@ -7,6 +7,7 @@ from users.models import Client
 
 
 def index(request):
+    """Отображение главной страницы"""
     unique_client_count = Client.objects.values('email').distinct().count()
     mailing_count = Mailing.objects.all().count()
     active_mailing_count = Mailing.objects.filter(status='R').count()
@@ -25,6 +26,7 @@ def index(request):
 
 
 def about(request):
+    """Отображение страницы О нас"""
     context = {
         'title': 'О нас',
         'phone': '+987654321123',

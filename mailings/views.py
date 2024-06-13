@@ -1,16 +1,11 @@
 from django.contrib import messages
 from django.db import IntegrityError
-# from django.http import HttpResponseRedirect
-# from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
 
 from django.views.generic import ListView, DetailView, UpdateView, DeleteView, CreateView
 
-from mailings.forms import MailForm, MailingForm
+from mailings.forms import MailForm, MailingForm, MailingManagerForm
 from mailings.models import Mail, Mailing, MailingAttempt
-
-
-# from mailings.services import send_email_to_all_clients, schedule_mailing_tasks
 
 
 class MailListView(ListView):
@@ -63,9 +58,7 @@ class MailUpdateView(UpdateView):
     model = Mail
     form_class = MailForm
 
-    # success_url = reverse_lazy('mailings:mails')
     def get_success_url(self):
-        # self.object - это объект Mailing, который был обновлен
         return reverse('mailings:mail_detail', kwargs={'slug': self.object.slug})
 
     def get_context_data(self, **kwargs):
@@ -84,24 +77,22 @@ class MailDeleteView(DeleteView):
         return context
 
 
-# def send_email_to_all_clients_view(request, mail_slug):
-#     send_email_to_all_clients(request, mail_slug)
-#     mails_url = reverse('mailings:mails')
-#     return HttpResponseRedirect(mails_url)
+class MailingListView(ListView):
+    model = Mailing
 
-# def start_schedule(request):
-#     # Запускаем задачу планировщика
-#     schedule_mailing_tasks()
-#
-#     # Перенаправляем пользователя обратно на страницу с рассылками
-#     return redirect(reverse('mailings:mails'))
+    def get_queryset(self):
+        if self.request.user.groups.filter(name='manager').exists():
+            return Mailing.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Все рассылки'
+        return context
 
 
 class MailingCreateView(CreateView):
     model = Mailing
     form_class = MailingForm
-
-    # success_url = '/mailings/'
 
     def form_valid(self, form):
         """Установления связи между объектами Mailing и Mail"""
@@ -109,13 +100,7 @@ class MailingCreateView(CreateView):
         form.instance.mail = Mail.objects.get(slug=mail_slug)
         return super().form_valid(form)
 
-    # def get_success_url(self):
-    #     mail_slug = self.object.mail.slug
-    #     # Используем slug созданного объекта для создания URL
-    #     return reverse('mailings:mail_detail', kwargs={'slug': mail_slug})
-
     def get_success_url(self):
-        # self.object - это объект Mailing, который был обновлен
         return reverse('mailings:mailing_detail', kwargs={'pk': self.object.pk})
 
     def get_context_data(self, **kwargs):
@@ -159,27 +144,32 @@ class MailingUpdateView(UpdateView):
     model = Mailing
     form_class = MailingForm
 
-    # success_url = reverse_lazy('mailings:mailing_detail')
     def get_success_url(self):
-        # self.object - это объект Mailing, который был обновлен
-        return reverse('mailings:mailing_detail', kwargs={'pk': self.object.pk})
+        if self.request.user.groups.filter(name='manager').exists():
+            return reverse('mailings:mailing_list')
+        else:
+            return reverse('mailings:mailing_detail', kwargs={'pk': self.object.pk})
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Редактировать рассылку'
+        context['pk'] = self.request.user.pk
         return context
+
+    def get_form_class(self):
+        user = self.request.user
+        if not user.groups.filter(name='manager').exists():
+            return MailingForm
+        else:
+            return MailingManagerForm
 
 
 class MailingAttemptListView(ListView):
     model = MailingAttempt
 
     def get_queryset(self):
-        """
-        Переопределите метод `get_queryset`, чтобы отфильтровать попытки рассылки
-        для конкретного `mailing_id`.
-        """
-        mailing_pk = self.kwargs.get('pk')  # Получите `mailing_id` из URL-параметров
-        return MailingAttempt.objects.filter(mailing__pk=mailing_pk)
+        mailing_pk = self.kwargs.get('pk')
+        return MailingAttempt.objects.filter(mailing__pk=mailing_pk).order_by('-last_attempt_date')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

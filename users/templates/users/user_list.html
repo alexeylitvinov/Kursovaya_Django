@@ -1,16 +1,31 @@
 {% extends 'main/index.html' %}
+{% load filters %}
 {% block content %}
 <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
     <h1 class="display-6">Наши пользователи. Всего {{ user_count }}</h1>
     <div class="mb-5"></div>
     <table class="table table-hover">
-        {% for user in object_list %}
-        <tbody>
-        <tr>
-            <td>{{ user.company_name }}</td>
-        </tr>
-        {% endfor %}
+        {% if user|has_group:'manager' %}
+            {% for user in object_list %}
+                <tbody>
+                    <tr>
+                        <td>{{ user.company_name }}</td>
+                        <td><a href="{% url 'users:update' pk=user.id %}"
+                        class="link-dark link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover px-2">
+                        {% if user.is_active %}
+                            Блокировать пользователя
+                        {% else %}
+                            Разблокировать пользователя
+                        {% endif %}
+                        </a></td>
+            {% endfor %}
+        {% else %}
+            {% for user in object_list %}
+                    <td>{{ user.company_name }}</td>
+                    </tr>
+            {% endfor %}
         </tbody>
+        {% endif %}
     </table>
 </div>
 {% endblock %}

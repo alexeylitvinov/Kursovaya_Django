@@ -7,14 +7,11 @@ from django.views.generic import CreateView, ListView, DetailView, UpdateView, D
 from config.settings import EMAIL_HOST_USER
 
 from users.services import send_confirmation_email
-from users.forms import UserRegisterForm, UserAuthenticationForm, ClientForm
+from users.forms import UserRegisterForm, UserAuthenticationForm, ClientForm, UserForm, UserManagerForm
 from users.models import User, Client
 
 
 class UserCreateView(CreateView):
-    """
-    Регистрация нового пользователя
-    """
     model = User
     form_class = UserRegisterForm
     success_url = reverse_lazy('users:login')
@@ -25,18 +22,12 @@ class UserCreateView(CreateView):
         return context
 
     def form_valid(self, form):
-        """
-        Подтверждение регистрации с отсылкой письма на email пользователя
-        """
         user = form.save()
         send_confirmation_email(self.request, user, EMAIL_HOST_USER)
         return super().form_valid(form)
 
 
 class UserLoginView(LoginView):
-    """
-    Авторизация пользователя
-    """
     model = User
     form_class = UserAuthenticationForm
     success_url = reverse_lazy('users:login')
@@ -54,11 +45,30 @@ class UserListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Пользователи'
-        context['user_count'] = User.objects.count() - 1
+        context['user_count'] = User.objects.count() - 2
         return context
 
     def get_queryset(self):
-        return User.objects.filter(is_superuser=False)
+        return User.objects.filter(is_superuser=False).exclude(groups__name='manager')
+
+
+class UserUpdateView(UpdateView):
+    model = User
+    form_class = UserForm
+    success_url = reverse_lazy('users:users')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Редактировать пользователя'
+        context['pk'] = self.request.user.pk
+        return context
+
+    def get_form_class(self):
+        user = self.request.user
+        if not user.groups.filter(name='manager').exists():
+            return UserForm
+        else:
+            return UserManagerForm
 
 
 class ClientListView(ListView):

@@ -1,4 +1,5 @@
 {% extends 'main/index.html' %}
+{% load filters %}
 {% block content %}
 <div class="container">
     <div class="row">
@@ -9,7 +10,11 @@
                     {{ form.as_p }}
                 </div>
                 <button type="submit" class="btn btn-light">Сохранить</button>
+                {% if user|has_group:'manager' %}
+                <a href="{% url 'mailings:mailing_list' %}" class="btn btn-light">Назад</a>
+                {% else %}
                 <a href="{% url 'mailings:mails' %}" class="btn btn-light">Назад</a>
+                {% endif %}
             </form>
         </div>
     </div>

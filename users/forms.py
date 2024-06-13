@@ -6,10 +6,6 @@ from users.models import User, Client
 
 
 class StyleFormMixin:
-    """
-    Миксин для стиля отображения формы создания и редактирования
-    """
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
@@ -29,6 +25,18 @@ class UserAuthenticationForm(StyleFormMixin, AuthenticationForm):
     class Meta:
         model = User
         fields = ('email', 'password')
+
+
+class UserForm(StyleFormMixin, forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'company_name')
+
+
+class UserManagerForm(StyleFormMixin, forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('is_active',)
 
 
 class ClientForm(StyleFormMixin, forms.ModelForm):

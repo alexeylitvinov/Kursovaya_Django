@@ -11,9 +11,7 @@ from users.models import User
 
 
 def password_reset(request):
-    """
-    Установка рандомного пароля пользователя
-    """
+    """Функция для установки рандомного пароля для пользователя"""
     if request.method == 'POST':
         email = request.POST['email']
         try:
@@ -39,9 +37,7 @@ def password_reset(request):
 
 
 def email_verification(request, token):
-    """
-    Верификация пользователя по почте
-    """
+    """Верификация пользователя по почте"""
     user = get_object_or_404(User, token=token)
     user.is_active = True
     user.save()
@@ -49,9 +45,7 @@ def email_verification(request, token):
 
 
 def send_confirmation_email(request, user, email_host_user):
-    """
-    Отправка письма с подтверждением на email пользователя
-    """
+    """Отправка письма с подтверждением на email пользователя"""
     user.is_active = False
     token = secrets.token_hex(16)
     user.token = token

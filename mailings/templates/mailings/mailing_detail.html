@@ -14,7 +14,7 @@
     <a href="{% url 'mailings:schedule_mailing_tasks' pk=object.id %}" class="btn btn-light">Начать</a>
     {% endif %}
     {% if object.status == 'R' %}
-    <a href="{% url 'mailings:complete_mailing' pk=object.id %}" class="btn btn-light">Завершить</a>
+    <a href="{% url 'mailings:complete_mailing' pk=object.id %}" class="btn btn-light">Остановить</a>
     {% endif %}
 </div>
 <div class="mb-3"></div>

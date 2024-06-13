@@ -8,10 +8,15 @@
                     {% csrf_token %}
                     {{ form.as_p }}
                 </div>
+                {% if user.is_authenticated %}
+                <button type="submit" class="btn btn-light">
+                    Сохранить
+                    {% else %}
                 <button type="submit" class="btn btn-light">
                     Зарегистрироваться
+                    {% endif %}
                 </button>
-                <a href="/" class="btn btn-light">Назад</a>
+                <a href="{% url 'users:users' %}" class="btn btn-light">Назад</a>
             </form>
         </div>
     </div>
