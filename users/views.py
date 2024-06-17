@@ -15,11 +15,7 @@ class UserCreateView(CreateView):
     model = User
     form_class = UserRegisterForm
     success_url = reverse_lazy('users:login')
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Регистрация'
-        return context
+    extra_context = {'title': 'Регистрация'}
 
     def form_valid(self, form):
         user = form.save()
@@ -32,19 +28,15 @@ class UserLoginView(LoginView):
     form_class = UserAuthenticationForm
     success_url = reverse_lazy('users:login')
     template_name = "users/login.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Авторизация'
-        return context
+    extra_context = {'title': 'Авторизация'}
 
 
 class UserListView(ListView):
     model = User
+    extra_context = {'title': 'Пользователи'}
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Пользователи'
         context['user_count'] = User.objects.count() - 2
         return context
 
@@ -56,10 +48,10 @@ class UserUpdateView(UpdateView):
     model = User
     form_class = UserForm
     success_url = reverse_lazy('users:users')
+    extra_context = {'title': 'Редактировать пользователя'}
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Редактировать пользователя'
         context['pk'] = self.request.user.pk
         return context
 
@@ -73,6 +65,7 @@ class UserUpdateView(UpdateView):
 
 class ClientListView(ListView):
     model = Client
+    extra_context = {'title': 'Клиенты'}
 
     def get_queryset(self):
         if self.request.user.is_authenticated:
@@ -82,24 +75,20 @@ class ClientListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Клиенты'
         context['client_count'] = self.get_queryset().count()
         return context
 
 
 class ClientDetailView(DetailView):
     model = Client
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Клиент'
-        return context
+    extra_context = {'title': 'Клиент'}
 
 
 class ClientCreateView(CreateView):
     model = Client
     form_class = ClientForm
     success_url = reverse_lazy('users:clients')
+    extra_context = {'title': 'Добавить клиента'}
 
     def form_valid(self, form):
         client = form.save(commit=False)
@@ -111,28 +100,15 @@ class ClientCreateView(CreateView):
             return super().form_invalid(form)
         return super().form_valid(form)
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Добавить клиента'
-        return context
-
 
 class ClientUpdateView(UpdateView):
     model = Client
     form_class = ClientForm
     success_url = reverse_lazy('users:clients')
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Редактировать клиента'
-        return context
+    extra_context = {'title': 'Редактировать клиента'}
 
 
 class ClientDeleteView(DeleteView):
     model = Client
     success_url = reverse_lazy('users:clients')
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Удалить клиента'
-        return context
+    extra_context = {'title': 'Удалить клиента'}

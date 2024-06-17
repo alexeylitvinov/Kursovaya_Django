@@ -10,6 +10,7 @@ from mailings.models import Mail, Mailing, MailingAttempt
 
 class MailListView(ListView):
     model = Mail
+    extra_context = {'title': 'Письма'}
 
     def get_queryset(self):
         if self.request.user.is_authenticated:
@@ -19,24 +20,21 @@ class MailListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Письма'
+        # context['title'] = 'Письма'
         context['mail_count'] = self.get_queryset().count()
         return context
 
 
 class MailDetailView(DetailView):
     model = Mail
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Письмо'
-        return context
+    extra_context = {'title': 'Письмо'}
 
 
 class MailCreateView(CreateView):
     model = Mail
     form_class = MailForm
     success_url = reverse_lazy('mailings:mails')
+    extra_context = {'title': 'Создать письмо'}
 
     def form_valid(self, form):
         message = form.save(commit=False)
@@ -48,51 +46,36 @@ class MailCreateView(CreateView):
             return super().form_invalid(form)
         return super().form_valid(form)
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Создать письмо'
-        return context
-
 
 class MailUpdateView(UpdateView):
     model = Mail
     form_class = MailForm
+    extra_context = {'title': 'Редактировать письмо'}
 
     def get_success_url(self):
         return reverse('mailings:mail_detail', kwargs={'slug': self.object.slug})
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Редактировать письмо'
-        return context
 
 
 class MailDeleteView(DeleteView):
     model = Mail
     success_url = reverse_lazy('mailings:mails')
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Удалить письмо'
-        return context
+    extra_context = {'title': 'Удалить письмо'}
 
 
 class MailingListView(ListView):
     model = Mailing
+    extra_context = {'title': 'Все рассылки'}
 
     def get_queryset(self):
+        # if self.request.user.has_any_group('manager'):
         if self.request.user.groups.filter(name='manager').exists():
             return Mailing.objects.all()
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Все рассылки'
-        return context
 
 
 class MailingCreateView(CreateView):
     model = Mailing
     form_class = MailingForm
+    extra_context = {'title': 'Создать рассылку'}
 
     def form_valid(self, form):
         """Установления связи между объектами Mailing и Mail"""
@@ -103,18 +86,13 @@ class MailingCreateView(CreateView):
     def get_success_url(self):
         return reverse('mailings:mailing_detail', kwargs={'pk': self.object.pk})
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Создать рассылку'
-        return context
-
 
 class MailingDetailView(DetailView):
     model = Mailing
+    extra_context = {'title': 'Рассылка'}
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Рассылка'
         context['mail_slug'] = self.object.mail.slug
         user = self.object.mail.user
         clients = user.client_set.all()
@@ -133,16 +111,13 @@ class MailingDetailView(DetailView):
 class MailingDeleteView(DeleteView):
     model = Mailing
     success_url = reverse_lazy('mailings:mails')
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Удалить рассылку'
-        return context
+    extra_context = {'title': 'Удалить рассылку'}
 
 
 class MailingUpdateView(UpdateView):
     model = Mailing
     form_class = MailingForm
+    extra_context = {'title': 'Редактировать рассылку'}
 
     def get_success_url(self):
         if self.request.user.groups.filter(name='manager').exists():
@@ -152,7 +127,6 @@ class MailingUpdateView(UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Редактировать рассылку'
         context['pk'] = self.request.user.pk
         return context
 
@@ -166,12 +140,8 @@ class MailingUpdateView(UpdateView):
 
 class MailingAttemptListView(ListView):
     model = MailingAttempt
+    extra_context = {'title': 'Логи рассылки'}
 
     def get_queryset(self):
         mailing_pk = self.kwargs.get('pk')
         return MailingAttempt.objects.filter(mailing__pk=mailing_pk).order_by('-last_attempt_date')
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Логи рассылки'
-        return context

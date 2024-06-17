@@ -6,20 +6,12 @@ from blogs.models import Blog
 class BlogListView(ListView):
     model = Blog
     context_object_name = 'all_objects'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Блоги'
-        return context
+    extra_context = {'title': 'Блоги'}
 
 
 class BlogDetailView(DetailView):
     model = Blog
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Блог'
-        return context
+    extra_context = {'title': 'Блог'}
 
     def get_object(self, queryset=None):
         """
